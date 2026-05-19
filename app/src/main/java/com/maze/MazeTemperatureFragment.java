@@ -353,8 +353,8 @@ public class MazeTemperatureFragment extends Fragment {
 
         YAxis leftAxis = lineChart.getAxisLeft();
         leftAxis.setAxisMinimum(0f);
-        // Se o utilizador diz que são percentagens, talvez o máximo deva ser 100 ou pelo menos cobrir o limite
-        leftAxis.setAxisMaximum(Math.max(100f, maxHighValue + 10f)); 
+        // O utilizador definiu 30 como o valor máximo absoluto de referência
+        leftAxis.setAxisMaximum(30f);
 
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setAxisMinimum(0f);

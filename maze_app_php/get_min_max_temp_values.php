@@ -21,28 +21,34 @@ if ($conn->connect_error) {
     exit;
 }
 
-// Pegar o limite da simulação ativa
+// 1. Definimos o valor máximo absoluto assumido para temperatura como 30
+$valorReferenciaTemp = 30.0;
+
+// 2. Pegar o limite (percentagem) da simulação ativa
 $sql = "SELECT LimiteTemp FROM Simulacao WHERE Estado = 'A_DECORRER' ORDER BY IDSimulacao DESC LIMIT 1";
 $result = $conn->query($sql);
 
+$percentagem = 80.0; // Valor default de segurança se não houver simulação
+
 if ($result && $row = $result->fetch_assoc()) {
-    $response['success'] = true;
-    $response['data'] = array(
-        "minimo" => 0.0,
-        "maximo" => (float)$row['LimiteTemp']
-    );
+    $percentagem = (float)$row['LimiteTemp'];
 } else {
-    // Se não houver uma a decorrer, tenta a última pendente ou qualquer uma
+    // Tenta fallback para a última simulação criada
     $sqlFallback = "SELECT LimiteTemp FROM Simulacao ORDER BY IDSimulacao DESC LIMIT 1";
     $resFallback = $conn->query($sqlFallback);
     if ($resFallback && $row = $resFallback->fetch_assoc()) {
-        $response['success'] = true;
-        $response['data'] = array("minimo" => 0.0, "maximo" => (float)$row['LimiteTemp']);
-    } else {
-        $response['success'] = true;
-        $response['data'] = array("minimo" => 0.0, "maximo" => 30.0);
+        $percentagem = (float)$row['LimiteTemp'];
     }
 }
+
+// 3. O valor da linha vermelha no Android será a percentagem aplicada aos 30.0
+$valorSeguranca = ($percentagem / 100) * $valorReferenciaTemp;
+
+$response['success'] = true;
+$response['data'] = array(
+    "minimo" => 0.0,
+    "maximo" => round($valorSeguranca, 2)
+);
 
 $conn->close();
 echo json_encode($response);

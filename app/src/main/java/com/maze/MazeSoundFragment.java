@@ -320,8 +320,8 @@ public class MazeSoundFragment extends Fragment {
 
         YAxis leftAxis = lineChart.getAxisLeft();
         leftAxis.setAxisMinimum(0f);
-        // Se som máximo for percentagem, usamos 100 como base ou o limite
-        leftAxis.setAxisMaximum(Math.max(100f, maxHighValue + 10f));
+        // O utilizador definiu 70 como o valor máximo absoluto de referência
+        leftAxis.setAxisMaximum(70f);
 
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setAxisMinimum(0f);

@@ -21,9 +21,6 @@ public class Mensagem {
     @SerializedName("Leitura")
     private Double leitura;
 
-    @SerializedName("TipoAlerta")
-    private String tipoAlerta;
-
     @SerializedName("Msg")
     private String msg;
 
@@ -51,23 +48,21 @@ public class Mensagem {
     public Double getLeitura() { return leitura; }
     public void setLeitura(Double leitura) { this.leitura = leitura; }
 
-    public String getTipoAlerta() { return tipoAlerta; }
-    public void setTipoAlerta(String tipoAlerta) { this.tipoAlerta = tipoAlerta; }
-
     public String getMsg() { return msg; }
     public void setMsg(String msg) { this.msg = msg; }
 
     public String getHoraEscrita() { return horaEscrita; }
     public void setHoraEscrita(String horaEscrita) { this.horaEscrita = horaEscrita; }
 
-    // Helper for legacy code
+    // Legacy support for Fragment display
     public String getDate() { return hora; }
     public String getText() { return msg; }
     public String getValue() { return leitura != null ? String.valueOf(leitura) : ""; }
 
     public int getMessagetype() {
-        if (tipoAlerta == null) return 0;
-        if (tipoAlerta.equals("S")) return 1;
+        if (sensor == null) return 0;
+        if (sensor.equalsIgnoreCase("Temp")) return 1;
+        if (sensor.equalsIgnoreCase("Som")) return 2;
         return 0;
     }
 }

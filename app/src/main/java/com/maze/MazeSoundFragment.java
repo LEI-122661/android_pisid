@@ -118,7 +118,7 @@ public class MazeSoundFragment extends Fragment {
     }
 
     private void fetchSoundData() {
-        String soundUrl = "http://" + host + "/maze_app_php/get_sound_data.php";
+        String soundUrl = "http://" + host + "/get_sound_data.php";
 
         HttpUrl.Builder urlBuilder = HttpUrl.parse(soundUrl).newBuilder();
         try {
@@ -210,7 +210,7 @@ public class MazeSoundFragment extends Fragment {
     }
 
     private void fetchHighValue(List<SoundData> soundDataList) {
-        String highValueUrl = "http://" + host + "/maze_app_php/get_max_sound_value.php";
+        String highValueUrl = "http://" + host + "/get_max_sound_value.php";
 
         HttpUrl.Builder urlBuilder = HttpUrl.parse(highValueUrl).newBuilder();
         try {

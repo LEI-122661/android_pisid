@@ -126,7 +126,7 @@ public class MarsamiRoomFragment extends Fragment {
     }
 
     private void fetchRoomData() {
-        String roomDataUrl = "http://" + host + "/maze_app_php/get_room_data.php"; // Ajuste o nome do seu script PHP se for diferente
+        String roomDataUrl = "http://" + host + "/get_room_data.php"; // Ajuste o nome do seu script PHP se for diferente
 
         HttpUrl.Builder urlBuilder = HttpUrl.parse(roomDataUrl).newBuilder();
         try {

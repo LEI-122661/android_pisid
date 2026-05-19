@@ -3,9 +3,8 @@ package com.maze.models;
 import com.google.gson.annotations.SerializedName;
 
 public class SoundData {
-
     @SerializedName("IDSom")
-    private int idSom;
+    private int id;
 
     @SerializedName("IDMensagem")
     private Integer idMensagem;
@@ -14,23 +13,19 @@ public class SoundData {
     private String hora;
 
     @SerializedName("Som")
-    private float som;
+    private float value;
 
     public SoundData() {}
 
-    public int getIdSom() { return idSom; }
-    public void setIdSom(int idSom) { this.idSom = idSom; }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+
+    public float getValue() { return value; }
+    public void setValue(float value) { this.value = value; }
 
     public Integer getIdMensagem() { return idMensagem; }
     public void setIdMensagem(Integer idMensagem) { this.idMensagem = idMensagem; }
 
     public String getHora() { return hora; }
     public void setHora(String hora) { this.hora = hora; }
-
-    public float getSom() { return som; }
-    public void setSom(float som) { this.som = som; }
-
-    // Legacy support
-    public int getId() { return idSom; }
-    public float getValue() { return som; }
 }

@@ -3,9 +3,8 @@ package com.maze.models;
 import com.google.gson.annotations.SerializedName;
 
 public class TempData {
-
     @SerializedName("IDTemperatura")
-    private int idTemperatura;
+    private int id;
 
     @SerializedName("IDMensagem")
     private Integer idMensagem;
@@ -14,23 +13,19 @@ public class TempData {
     private String hora;
 
     @SerializedName("Temperatura")
-    private float temperatura;
+    private float value;
 
     public TempData() {}
 
-    public int getIdTemperatura() { return idTemperatura; }
-    public void setIdTemperatura(int idTemperatura) { this.idTemperatura = idTemperatura; }
+    public int getID() { return id; }
+    public void setID(int id) { this.id = id; }
+
+    public float getValue() { return value; }
+    public void setValue(float value) { this.value = value; }
 
     public Integer getIdMensagem() { return idMensagem; }
     public void setIdMensagem(Integer idMensagem) { this.idMensagem = idMensagem; }
 
     public String getHora() { return hora; }
     public void setHora(String hora) { this.hora = hora; }
-
-    public float getTemperatura() { return temperatura; }
-    public void setTemperatura(float temperatura) { this.temperatura = temperatura; }
-
-    // Legacy support
-    public int getID() { return idTemperatura; }
-    public float getValue() { return temperatura; }
 }

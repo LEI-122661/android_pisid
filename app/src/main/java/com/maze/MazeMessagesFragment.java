@@ -92,7 +92,7 @@ public class MazeMessagesFragment extends Fragment {
 
     private void fetchMessages() {
         // ---- ALTERAÇÃO AQUI: Construir URL com parâmetros GET ----
-        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://" + host + "/maze_app_php/get_messages.php").newBuilder();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://" + host + "/get_messages.php").newBuilder();
         urlBuilder.addQueryParameter("database", database);
         urlBuilder.addQueryParameter("username", username);
         urlBuilder.addQueryParameter("password", password);

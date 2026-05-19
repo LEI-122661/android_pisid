@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         username = getIntent().getStringExtra("username");
         password = getIntent().getStringExtra("password");
 
-        if (host == null) host = "192.168.0.13:9000";
+        if (host == null) host = "192.168.1.14:8001";
         if (database == null) database = "simulacao_labirinto";
         if (username == null) username = "root@gmail.com";
         if (password == null) password = "root";

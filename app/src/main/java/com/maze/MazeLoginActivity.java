@@ -40,6 +40,12 @@ public class MazeLoginActivity extends AppCompatActivity {
         //etTeam = findViewById(R.id.etTeam);
         btnConnect = findViewById(R.id.btnConnect);
 
+        // Pré-preenchimento com o IP do PC para facilitar testes com dispositivo físico
+        etHost.setText("192.168.1.14:8001");
+        etDatabase.setText("simulacao_labirinto");
+        etUsername.setText("root@gmail.com");
+        etPassword.setText("root");
+
         client = new OkHttpClient();
 
         btnConnect.setOnClickListener(new View.OnClickListener() {
@@ -51,19 +57,25 @@ public class MazeLoginActivity extends AppCompatActivity {
     }
 
     private void attemptLogin() {
-        String host = etHost.getText().toString().trim();
-        String username = etUsername.getText().toString().trim();
-        String password = etPassword.getText().toString().trim();
-        String database = etDatabase.getText().toString().trim();
+        String hostInput = etHost.getText().toString().trim();
+        final String username = etUsername.getText().toString().trim();
+        final String password = etPassword.getText().toString().trim();
+        final String database = etDatabase.getText().toString().trim();
 
-        if (host.isEmpty() || username.isEmpty() || password.isEmpty() || database.isEmpty()) {
+        if (hostInput.isEmpty() || username.isEmpty() || password.isEmpty() || database.isEmpty()) {
             Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Limpeza do Host para evitar erros de redirecionamento ou URLs mal formadas
+        String tempHost = hostInput.replace("http://", "").replace("https://", "");
+        if (tempHost.endsWith("/")) {
+            tempHost = tempHost.substring(0, tempHost.length() - 1);
+        }
+        final String host = tempHost;
+
         // URL base do seu script PHP de login.
-        // ATENÇÃO: Use o IP do seu computador na rede local (ex: 10.0.2.2 para emulador).
-        String baseUrl = "http://" + host + "/maze_app_php/login.php";
+        String baseUrl = "http://" + host + "/login.php";
 
         // CONSTRUÇÃO DA URL COM PARÂMETROS GET
         Uri.Builder uriBuilder = Uri.parse(baseUrl).buildUpon();
@@ -100,7 +112,7 @@ public class MazeLoginActivity extends AppCompatActivity {
                         boolean success = jsonResponse.getBoolean("success");
 
                         if (success) {
-                            String idUtilizador = jsonResponse.getString("IDUtilizador");
+                            final String idUtilizador = jsonResponse.getString("IDUtilizador");
                             runOnUiThread(() -> {
                                 //etTeam.setText(idUtilizador);
                                 Toast.makeText(MazeLoginActivity.this, "Login bem-sucedido!", Toast.LENGTH_SHORT).show();
@@ -114,7 +126,7 @@ public class MazeLoginActivity extends AppCompatActivity {
                                 finish();
                             });
                         } else {
-                            String message = jsonResponse.getString("message");
+                            final String message = jsonResponse.getString("message");
                             runOnUiThread(() -> Toast.makeText(MazeLoginActivity.this, message, Toast.LENGTH_LONG).show());
                         }
                     } catch (JSONException e) {

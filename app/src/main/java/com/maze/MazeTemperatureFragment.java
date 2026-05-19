@@ -121,7 +121,7 @@ public class MazeTemperatureFragment extends Fragment {
     }
 
     private void fetchTemperatureData() {
-        String tempUrl = "http://" + host + "/maze_app_php/get_temperature_data.php";
+        String tempUrl = "http://" + host + "/get_temperature_data.php";
 
         HttpUrl.Builder urlBuilder = HttpUrl.parse(tempUrl).newBuilder();
         try {
@@ -205,7 +205,7 @@ public class MazeTemperatureFragment extends Fragment {
     }
 
     private void fetchMinMaxValues(List<TempData> tempDataList) {
-        String minMaxUrl = "http://" + host + "/maze_app_php/get_min_max_temp_values.php";
+        String minMaxUrl = "http://" + host + "/get_min_max_temp_values.php";
 
         HttpUrl.Builder urlBuilder = HttpUrl.parse(minMaxUrl).newBuilder();
         try {

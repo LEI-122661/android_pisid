@@ -22,7 +22,7 @@ if ($conn->connect_error) {
 }
 
 // 1. Definimos o valor máximo absoluto assumido para ruído como 70
-$valorReferenciaRuido = 70.0;
+$valorReferenciaRuido = 17.0;
 
 // 2. Pegar o limite (percentagem) da simulação ativa
 $sql = "SELECT LimiteRuido FROM Simulacao WHERE Estado = 'A_DECORRER' ORDER BY IDSimulacao DESC LIMIT 1";

@@ -22,7 +22,7 @@ if ($conn->connect_error) {
 }
 
 // 1. Definimos o valor máximo absoluto assumido para temperatura como 30
-$valorReferenciaTemp = 30.0;
+$valorReferenciaTemp = 20.0;
 
 // 2. Pegar o limite (percentagem) da simulação ativa
 $sql = "SELECT LimiteTemp FROM Simulacao WHERE Estado = 'A_DECORRER' ORDER BY IDSimulacao DESC LIMIT 1";

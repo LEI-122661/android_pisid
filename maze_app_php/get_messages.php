@@ -17,7 +17,7 @@ if (empty($username) || empty($password) || empty($database)) {
 
 $host = '127.0.0.1';
 $db_user = 'root';
-$db_pass = ''; // Ajuste conforme seu ambiente
+$db_pass = '';
 
 $conn = new mysqli($host, $db_user, $db_pass, $database);
 
@@ -29,23 +29,21 @@ if ($conn->connect_error) {
 
 $conn->set_charset("utf8mb4");
 
-$sql = "SELECT ID, IDSimulacao, Hora, Sala, Sensor, Leitura, Msg, HoraEscrita FROM Mensagem ORDER BY ID DESC LIMIT 50";
+$sql = "SELECT IDAlerta as ID, IDSimulacao, Sensor, TipoAlerta, Valor, DataAlerta, Descricao FROM Alerta ORDER BY IDAlerta DESC LIMIT 50";
 $result = $conn->query($sql);
 
 if ($result) {
-    $messages = array();
+    $alerts = array();
     while ($row = $result->fetch_assoc()) {
-        // Converter tipos para garantir JSON correto
         $row['ID'] = (int)$row['ID'];
-        $row['IDSimulacao'] = $row['IDSimulacao'] !== null ? (int)$row['IDSimulacao'] : null;
-        $row['Sala'] = $row['Sala'] !== null ? (int)$row['Sala'] : null;
-        $row['Leitura'] = $row['Leitura'] !== null ? (float)$row['Leitura'] : null;
-        $messages[] = $row;
+        $row['IDSimulacao'] = (int)$row['IDSimulacao'];
+        $row['Valor'] = $row['Valor'] !== null ? (float)$row['Valor'] : null;
+        $alerts[] = $row;
     }
     $response['success'] = true;
-    $response['data'] = $messages;
+    $response['data'] = $alerts;
 } else {
-    $response['message'] = 'Erro na consulta: ' . $conn->error;
+    $response['message'] = 'Erro na consulta de alertas: ' . $conn->error;
 }
 
 $conn->close();

@@ -315,10 +315,11 @@ public class MazeTemperatureFragment extends Fragment {
         ArrayList<Entry> maxLineEntries = new ArrayList<>();
         ArrayList<Entry> minLineEntries = new ArrayList<>();
 
-        for (TempData data : tempDataList) {
-            tempEntries.add(new Entry(data.getID(), data.getValue()));
-            maxLineEntries.add(new Entry(data.getID(), maxHighValue)); // Reta constante máxima
-            minLineEntries.add(new Entry(data.getID(), minLowValue));   // Reta constante mínima
+        for (int i = 0; i < tempDataList.size(); i++) {
+            TempData data = tempDataList.get(i);
+            tempEntries.add(new Entry(i, data.getValue()));
+            maxLineEntries.add(new Entry(i, maxHighValue)); // Reta constante máxima
+            minLineEntries.add(new Entry(i, minLowValue));   // Reta constante mínima
         }
 
         LineDataSet tempDataSet = new LineDataSet(tempEntries, "Temperature Value");
@@ -350,20 +351,14 @@ public class MazeTemperatureFragment extends Fragment {
         LineData lineData = new LineData(dataSets);
         lineChart.setData(lineData);
 
-        // Ajustar o eixo Y dinamicamente para os valores do gráfico
-        // Com base nos dados, o chart deve auto-escalar, mas pode ajudar a forçar um pouco
-        // Se os valores são sempre positivos, setAxisMinimum(0f) é bom.
-        // Se quiser que o gráfico se ajuste um pouco mais, pode calcular min/max dos dados:
-        float minY = Float.MAX_VALUE;
-        float maxY = Float.MIN_VALUE;
-        for (Entry entry : tempEntries) {
-            if (entry.getY() < minY) minY = entry.getY();
-            if (entry.getY() > maxY) maxY = entry.getY();
-        }
-
         YAxis leftAxis = lineChart.getAxisLeft();
-        leftAxis.setAxisMinimum(Math.min(0f, minY - 2f)); // Garante que começa em 0 ou um pouco abaixo do mínimo
-        leftAxis.setAxisMaximum(Math.max(maxHighValue + 2f, maxY + 2f)); // Garante que o máximo é um pouco acima do maior valor/limite
+        leftAxis.setAxisMinimum(0f);
+        // Se o utilizador diz que são percentagens, talvez o máximo deva ser 100 ou pelo menos cobrir o limite
+        leftAxis.setAxisMaximum(Math.max(100f, maxHighValue + 10f)); 
+
+        XAxis xAxis = lineChart.getXAxis();
+        xAxis.setAxisMinimum(0f);
+        xAxis.setAxisMaximum(Math.max(5, tempDataList.size() - 1));
 
         lineChart.invalidate(); // Atualizar o gráfico
     }

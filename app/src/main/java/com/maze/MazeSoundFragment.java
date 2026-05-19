@@ -280,43 +280,20 @@ public class MazeSoundFragment extends Fragment {
         ArrayList<Entry> soundEntries = new ArrayList<>();
         ArrayList<Entry> maxLineEntries = new ArrayList<>();
 
-        // Calculate min/max X and Y values from your sound data
-        float minXData = Float.MAX_VALUE;
-        float maxXData = Float.MIN_VALUE;
-        float minYData = Float.MAX_VALUE;
-        float maxYData = Float.MIN_VALUE;
+        for (int i = 0; i < soundDataList.size(); i++) {
+            SoundData data = soundDataList.get(i);
+            if (data == null) continue;
 
-        for (SoundData data : soundDataList) {
-            if (data == null) {
-                Log.w("MazeSound", "SoundData object is null, skipping entry.");
-                continue;
-            }
-
-            float id = (float) data.getId();
             float value = data.getValue();
-
-
-            if (Float.isNaN(id) || Float.isInfinite(id) || Float.isNaN(value) || Float.isInfinite(value)) {
-                Log.e("MazeSound", "Invalid ID or Value found for Entry. Skipping: ID=" + id + ", Value=" + value);
-                continue;
-            }
-
-            soundEntries.add(new Entry(id, value));
-            maxLineEntries.add(new Entry(id, maxHighValue)); // maxHighValue é constante
-
-            // Update min/max for axis auto-scaling
-            if (id < minXData) minXData = id;
-            if (id > maxXData) maxXData = id;
-            if (value < minYData) minYData = value;
-            if (value > maxYData) maxYData = value;
+            soundEntries.add(new Entry(i, value));
+            maxLineEntries.add(new Entry(i, maxHighValue));
         }
 
         Log.d("MazeSound", "Total soundEntries created: " + soundEntries.size());
 
         if (soundEntries.isEmpty()) {
-            lineChart.setNoDataText("Erro: Dados de som inválidos para exibir após processamento.");
+            lineChart.setNoDataText("Erro: Dados de som inválidos para exibir.");
             lineChart.invalidate();
-            Log.e("MazeSound", "soundEntries está vazia após o loop de processamento. Nenhum dado válido encontrado.");
             return;
         }
 
@@ -341,20 +318,16 @@ public class MazeSoundFragment extends Fragment {
         LineData lineData = new LineData(dataSets);
         lineChart.setData(lineData);
 
-        // --- CÓDIGO CRÍTICO PARA OS EIXOS ---
         YAxis leftAxis = lineChart.getAxisLeft();
-        // Use Math.min para garantir que o mínimo do eixo Y não seja maior que o máximo
-        // E adicione um pouco de margem
-        leftAxis.setAxisMinimum(Math.min(minYData, 0f) - 1f); // Garante que o mínimo é sensato
-        leftAxis.setAxisMaximum(Math.max(maxYData, maxHighValue) + 1f); // Garante que o máximo é sensato
-        leftAxis.setGranularity(1f); // Adicionar para evitar problemas de escala automática
+        leftAxis.setAxisMinimum(0f);
+        // Se som máximo for percentagem, usamos 100 como base ou o limite
+        leftAxis.setAxisMaximum(Math.max(100f, maxHighValue + 10f));
 
         XAxis xAxis = lineChart.getXAxis();
-        // Use Math.min para garantir que o mínimo do eixo X não seja maior que o máximo
-        // E adicione um pouco de margem
-        xAxis.setAxisMinimum(minXData - 0.5f);
-        xAxis.setAxisMaximum(maxXData + 0.5f);
-        xAxis.setGranularity(1f); // Importantíssimo para XAxis, especialmente com IDs inteiros
+        xAxis.setAxisMinimum(0f);
+        xAxis.setAxisMaximum(Math.max(5, soundEntries.size() - 1));
+
+        lineChart.invalidate(); // Force redraw
 
         Log.d("MazeSound", "Chart Axis Y Range: " + leftAxis.getAxisMinimum() + " to " + leftAxis.getAxisMaximum());
         Log.d("MazeSound", "Chart Axis X Range: " + xAxis.getAxisMinimum() + " to " + xAxis.getAxisMaximum());

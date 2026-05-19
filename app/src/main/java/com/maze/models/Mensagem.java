@@ -7,62 +7,43 @@ public class Mensagem {
     private int id;
 
     @SerializedName("IDSimulacao")
-    private Integer idSimulacao;
-
-    @SerializedName("Hora")
-    private String hora;
-
-    @SerializedName("Sala")
-    private Integer sala;
+    private int idSimulacao;
 
     @SerializedName("Sensor")
     private String sensor;
 
-    @SerializedName("Leitura")
-    private Double leitura;
+    @SerializedName("TipoAlerta")
+    private String tipoAlerta;
 
-    @SerializedName("Msg")
-    private String msg;
+    @SerializedName("Valor")
+    private Double valor;
 
-    @SerializedName("HoraEscrita")
-    private String horaEscrita;
+    @SerializedName("DataAlerta")
+    private String dataAlerta;
+
+    @SerializedName("Descricao")
+    private String descricao;
 
     public Mensagem() {}
 
-    // Getters and Setters
+    // Getters
     public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-
-    public Integer getIdSimulacao() { return idSimulacao; }
-    public void setIdSimulacao(Integer idSimulacao) { this.idSimulacao = idSimulacao; }
-
-    public String getHora() { return hora; }
-    public void setHora(String hora) { this.hora = hora; }
-
-    public Integer getSala() { return sala; }
-    public void setSala(Integer sala) { this.sala = sala; }
-
     public String getSensor() { return sensor; }
-    public void setSensor(String sensor) { this.sensor = sensor; }
+    public String getTipoAlerta() { return tipoAlerta; }
+    public Double getValor() { return valor; }
+    public String getDataAlerta() { return dataAlerta; }
+    public String getDescricao() { return descricao; }
 
-    public Double getLeitura() { return leitura; }
-    public void setLeitura(Double leitura) { this.leitura = leitura; }
-
-    public String getMsg() { return msg; }
-    public void setMsg(String msg) { this.msg = msg; }
-
-    public String getHoraEscrita() { return horaEscrita; }
-    public void setHoraEscrita(String horaEscrita) { this.horaEscrita = horaEscrita; }
-
-    // Legacy support for Fragment display
-    public String getDate() { return hora; }
-    public String getText() { return msg; }
-    public String getValue() { return leitura != null ? String.valueOf(leitura) : ""; }
+    // Legacy support for display in MazeMessagesFragment
+    public String getDate() { return dataAlerta; }
+    public String getText() { return descricao; }
+    public String getValue() { return valor != null ? String.valueOf(valor) : ""; }
 
     public int getMessagetype() {
-        if (sensor == null) return 0;
-        if (sensor.equalsIgnoreCase("Temp")) return 1;
-        if (sensor.equalsIgnoreCase("Som")) return 2;
-        return 0;
+        if (tipoAlerta == null) return 0;
+        // Example logic for colors based on TipoAlerta
+        if (tipoAlerta.equalsIgnoreCase("Critico")) return 3; // Red
+        if (tipoAlerta.equalsIgnoreCase("Aviso")) return 2;   // Green
+        return 1; // Blue
     }
 }

@@ -21,8 +21,7 @@ if ($conn->connect_error) {
     exit;
 }
 
-// Pegar o limite de ruído da simulação
-$sql = "SELECT LimiteRuido FROM Simulacao WHERE Estado = 'A_DECORRER' OR Estado = 'PENDENTE' ORDER BY IDSimulacao DESC LIMIT 1";
+$sql = "SELECT LimiteRuido FROM Simulacao WHERE Estado = 'A_DECORRER' ORDER BY IDSimulacao DESC LIMIT 1";
 $result = $conn->query($sql);
 
 if ($result && $row = $result->fetch_assoc()) {
@@ -31,9 +30,15 @@ if ($result && $row = $result->fetch_assoc()) {
         "maximo" => (float)$row['LimiteRuido']
     );
 } else {
-    $response['message'] = "Nenhum limite de ruído definido.";
-    $response['success'] = true;
-    $response['data'] = array("maximo" => 70.0);
+    $sqlFallback = "SELECT LimiteRuido FROM Simulacao ORDER BY IDSimulacao DESC LIMIT 1";
+    $resFallback = $conn->query($sqlFallback);
+    if ($resFallback && $row = $resFallback->fetch_assoc()) {
+        $response['success'] = true;
+        $response['data'] = array("maximo" => (float)$row['LimiteRuido']);
+    } else {
+        $response['success'] = true;
+        $response['data'] = array("maximo" => 70.0);
+    }
 }
 
 $conn->close();

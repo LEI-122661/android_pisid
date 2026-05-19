@@ -21,8 +21,8 @@ if ($conn->connect_error) {
     exit;
 }
 
-// Pegar o limite da simulação mais recente a decorrer ou a última criada
-$sql = "SELECT LimiteTemp FROM Simulacao WHERE Estado = 'A_DECORRER' OR Estado = 'PENDENTE' ORDER BY IDSimulacao DESC LIMIT 1";
+// Pegar o limite da simulação ativa
+$sql = "SELECT LimiteTemp FROM Simulacao WHERE Estado = 'A_DECORRER' ORDER BY IDSimulacao DESC LIMIT 1";
 $result = $conn->query($sql);
 
 if ($result && $row = $result->fetch_assoc()) {
@@ -32,10 +32,16 @@ if ($result && $row = $result->fetch_assoc()) {
         "maximo" => (float)$row['LimiteTemp']
     );
 } else {
-    $response['message'] = "Nenhum limite de temperatura definido.";
-    // Valores default caso não haja simulações
-    $response['success'] = true;
-    $response['data'] = array("minimo" => 0.0, "maximo" => 30.0);
+    // Se não houver uma a decorrer, tenta a última pendente ou qualquer uma
+    $sqlFallback = "SELECT LimiteTemp FROM Simulacao ORDER BY IDSimulacao DESC LIMIT 1";
+    $resFallback = $conn->query($sqlFallback);
+    if ($resFallback && $row = $resFallback->fetch_assoc()) {
+        $response['success'] = true;
+        $response['data'] = array("minimo" => 0.0, "maximo" => (float)$row['LimiteTemp']);
+    } else {
+        $response['success'] = true;
+        $response['data'] = array("minimo" => 0.0, "maximo" => 30.0);
+    }
 }
 
 $conn->close();
